@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from datetime import date
 
 class EmployeeCreate(BaseModel):
     employee_id: str
@@ -6,3 +7,8 @@ class EmployeeCreate(BaseModel):
     email: EmailStr
     department: str
 
+
+class AttendanceCreate(BaseModel):
+    employee_id: str
+    date: date
+    status: str

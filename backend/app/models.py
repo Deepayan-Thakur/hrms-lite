@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Date, ForeignKey
 from .database import Base
 
 class Employee(Base):
@@ -10,3 +10,11 @@ class Employee(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     department = Column(String, nullable=False)
 
+
+class Attendance(Base):
+    __tablename__ = "attendance"
+
+    id = Column(Integer, primary_key=True, index=True)
+    employee_id = Column(String, ForeignKey("employees.employee_id"), nullable=False)
+    date = Column(Date, nullable=False)
+    status = Column(String, nullable=False)  # Present / Absent
