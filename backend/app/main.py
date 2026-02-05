@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from .database import SessionLocal, engine
@@ -7,6 +8,15 @@ from . import models, schemas, crud
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="HRMS Lite API")
+
+# ✅ CORS FIX
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -17,10 +27,7 @@ def get_db():
 
 
 @app.post("/employees", status_code=status.HTTP_201_CREATED)
-def create_employee(
-    employee: schemas.EmployeeCreate,
-    db: Session = Depends(get_db)
-):
+def create_employee(employee: schemas.EmployeeCreate, db: Session = Depends(get_db)):
     existing = db.query(models.Employee).filter(
         (models.Employee.employee_id == employee.employee_id) |
         (models.Employee.email == employee.email)
@@ -48,10 +55,7 @@ def remove_employee(employee_id: str, db: Session = Depends(get_db)):
 
 
 @app.post("/attendance", status_code=201)
-def mark_attendance(
-    attendance: schemas.AttendanceCreate,
-    db: Session = Depends(get_db)
-):
+def mark_attendance(attendance: schemas.AttendanceCreate, db: Session = Depends(get_db)):
     employee = db.query(models.Employee).filter(
         models.Employee.employee_id == attendance.employee_id
     ).first()
