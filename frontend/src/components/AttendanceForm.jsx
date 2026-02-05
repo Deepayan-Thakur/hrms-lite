@@ -4,28 +4,27 @@ export default function AttendanceForm({ onSubmit }) {
   const [form, setForm] = useState({
     employee_id: "",
     date: "",
-    status: "",
+    status: "Present",
   });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(form);
+    setForm({ employee_id: "", date: "", status: "Present" });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit(form);
-        setForm({ employee_id: "", date: "", status: "" });
-      }}
-      className="space-y-3 max-w-md"
-    >
+    <form onSubmit={handleSubmit} className="space-y-4 mb-6">
       <input
         name="employee_id"
         placeholder="Employee ID"
         value={form.employee_id}
         onChange={handleChange}
-        className="w-full border p-2"
+        className="border p-2 w-full"
         required
       />
 
@@ -34,20 +33,22 @@ export default function AttendanceForm({ onSubmit }) {
         name="date"
         value={form.date}
         onChange={handleChange}
-        className="w-full border p-2"
+        className="border p-2 w-full"
         required
       />
 
-      <input
+      <select
         name="status"
-        placeholder="Present / Absent"
         value={form.status}
         onChange={handleChange}
-        className="w-full border p-2"
-        required
-      />
+        className="border p-2 w-full"
+      >
+        <option>Present</option>
+        <option>Absent</option>
+        <option>Leave</option>
+      </select>
 
-      <button className="bg-emerald-500 text-white px-4 py-2">
+      <button className="bg-blue-600 text-white px-4 py-2 rounded">
         Mark Attendance
       </button>
     </form>
