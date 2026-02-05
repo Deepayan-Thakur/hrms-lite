@@ -8,17 +8,17 @@ from . import models, schemas, crud
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="HRMS Lite API")
+origins = [
+    "https://hrms-lite-teal.vercel.app",  # your production frontend
+    "http://localhost:5173"               # dev frontend
+]
 
-# ✅ CORS FIX
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://hrms-lite-teal.vercel.app"
-    ],
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],   # allow GET, POST, OPTIONS, etc.
+    allow_headers=["*"],   # allow custom headers like Content-Type
 )
 
 def get_db():
