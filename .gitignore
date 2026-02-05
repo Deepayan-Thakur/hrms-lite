@@ -13,3 +13,12 @@ __pycache__/
 
 # Frontend dependencies
 node_modules/
+
+# Python
+venv/
+
+# Frontend
+dist/
+
+# OS
+.DS_Store
